@@ -11,6 +11,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "chokidar": "^4.0.3",
     "express": "^4.21.2"
-  }
+  },
+  "type": "module"
 }
