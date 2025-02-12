@@ -53,6 +53,46 @@ app.post("/api/watch-directory", (req, res) => {
     res.json({ message: `Watching directory: ${path}` });
 });
 
+app.post("/api/file/search", async (req, res) => {
+    const { dirPath, query, searchInContent } = req.body;
+    try {
+        const results = await fileManager.searchFiles(dirPath, query, searchInContent);
+        res.json(results);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.post("/api/file/create", async (req, res) => {
+    const { filePath, isDirectory } = req.body;
+    try {
+        await fileManager.createFileOrDir(filePath, isDirectory);
+        res.json({ message: "Created successfully." });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.delete("/api/file/delete", async (req, res) => {
+    const { filePath } = req.body;
+    try {
+        await fileManager.deleteFileOrDir(filePath);
+        res.json({ message: "Deleted successfully." });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.put("/api/file/rename", async (req, res) => {
+    const { oldPath, newPath } = req.body;
+    try {
+        await fileManager.renameOrMoveFile(oldPath, newPath);
+        res.json({ message: "Renamed or moved successfully." });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`)

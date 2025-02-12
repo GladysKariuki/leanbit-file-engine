@@ -39,6 +39,64 @@ class FileManager {
             throw new Error("Unable to read file: " + error.message);
         }
     }
+
+    async searchFiles(dirPath, query, searchInContent = false) {
+        const results = [];
+        try {
+            const files = await fs.readdir(dirPath, { withFileTypes: true });
+
+            for (const file of files) {
+                const filePath = path.join(dirPath, file.name);
+
+                if (file.name.includes(query)) {
+                    results.push({ filePath, match: "name" });
+                }
+
+                if (searchInContent && file.isFile()) {
+                    const content = await fs.readFile(filePath, "utf-8").catch(() => "");
+                    if (content.includes(query)) {
+                        results.push({ filePath, match: "content" });
+                    }
+                }
+            }
+        } catch (error) {
+            throw new Error("Search failed: " + error.message);
+        }
+        return results;
+    }
+
+    async createFileOrDir(filePath, isDirectory = false) {
+        try {
+            if (isDirectory) {
+                await fs.mkdir(filePath, { recursive: true });
+            } else {
+                await fs.writeFile(filePath, "");
+            }
+        } catch (error) {
+            throw new Error("Creation failed: " + error.message);
+        }
+    }
+
+    async deleteFileOrDir(filePath) {
+        try {
+            const stats = await fs.stat(filePath);
+            if (stats.isDirectory()) {
+                await fs.rm(filePath, { recursive: true, force: true });
+            } else {
+                await fs.unlink(filePath);
+            }
+        } catch (error) {
+            throw new Error("Deletion failed: " + error.message);
+        }
+    }
+
+    async renameOrMoveFile(oldPath, newPath) {
+        try {
+            await fs.rename(oldPath, newPath);
+        } catch (error) {
+            throw new Error("Rename/move failed: " + error.message);
+        }
+    }
 }
 
 export default FileManager;
