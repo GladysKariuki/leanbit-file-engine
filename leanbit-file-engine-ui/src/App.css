@@ -11,11 +11,52 @@
 }
 
 .subtitle-section {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.search-icon {
+  cursor: pointer;
+  font-size: 24px;
+}
+
+/* .files-and-folders-section {
+  width: 100vw;
+} */
+
+.files-and-folders-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 16px;
   padding: 32px 0;
 }
 
-.files-and-folders-section {
-  gap: 32px;
-  display: flex;
-  flex-wrap: wrap;
+.file-directory-card {
+  cursor: pointer;
+}
+
+.file-directory-card strong {
+  white-space: nowrap;
+  overflow: scroll;
+  /* text-overflow: ellipsis; */
+  scrollbar-width: none;
+  max-width: 100%;
+  display: block;
+}
+
+.file-directory-card p:first-child {
+  margin-bottom: 8px !important;
+}
+
+.breadcrumb-item {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, font-weight 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.breadcrumb-item:hover {
+  transform: scale(1.1);
+  font-weight: bold;
+  color: var(--sl-color-primary-600);
 }
